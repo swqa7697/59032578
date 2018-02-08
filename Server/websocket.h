@@ -65,6 +65,7 @@ public:
         MessageBufferLength = 0;
     }
 
+	int networkDelay;
     int socket;                            // client socket
     string MessageBuffer;                  // a blank string when there's no incoming frames
     int ReadyState;                        // between 0 and 3
@@ -77,6 +78,7 @@ public:
     string FrameBuffer;                    // joined onto end as a frame's data comes in, reset to blank string when all frame data has been read
     unsigned char MessageOpcode;           // stored by the first frame for fragmented messages, default value is 0
     size_t MessageBufferLength;            // the payload data length of MessageBuffer
+	clock_t timeElapsed;                   // the amount of time passed since playing the game. default value should be 0 before the start of the game
 };
 
 class webSocket{
@@ -124,4 +126,6 @@ private:
     nullCallback callPeriodic;
 };
 
+std::vector<std::string> &parseTime(const std::string &s, char delim, std::vector<std::string> &elems);
+std::vector<std::string> parseTime(const std::string &s, char delim);
 #endif
