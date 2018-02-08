@@ -1,37 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SocketHandler;
 
 public class Ball: MonoBehaviour
 {
-    public float mySpeed;
+    public float mySpeed; //will use server
 
     private Rigidbody2D myRigidbody;
-    private Vector2 myDirection;
+    private Vector2 myDirection; //server
 
 	private void Awake()
     {
-        myRigidbody = GetComponent<Rigidbody2D>();
-        myDirection = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
+        myRigidbody = GetComponent<Rigidbody2D>(); //server
+        myDirection = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)); //server
         myDirection.Normalize();
 	}
 
     private void FixedUpdate()
     {
-        move();
+        Move();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Top_bottom_edge")
-            myDirection.y = -myDirection.y;
+            myDirection.y = -myDirection.y; //will call server
         if (other.gameObject.tag == "Left_right_edge")
-            myDirection.x = -myDirection.x;
+            myDirection.x = -myDirection.x; //will call server
     }
 
-    private void move()
+    private void Move()
     {
-        Vector2 movement = myDirection * mySpeed * Time.deltaTime;
+        Vector2 movement = myDirection * mySpeed * Time.deltaTime; //server
         myRigidbody.MovePosition(myRigidbody.position + movement);
     }
 }
