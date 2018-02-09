@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{C3C1AAA0-435C-4C8F-9196-557AD1E6647C}</ProjectGuid>
+    <ProjectGuid>{A68E10B7-1D8C-416F-A50A-EAB6F33DA072}</ProjectGuid>
     <RootNamespace>Server</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -115,15 +115,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\demo4-server\base64.cpp" />
-    <ClCompile Include="..\..\..\demo4-server\main.cpp" />
-    <ClCompile Include="..\..\..\demo4-server\sha1.cpp" />
-    <ClCompile Include="..\..\..\demo4-server\websocket.cpp" />
+    <ClCompile Include="base64.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="sha1.cpp" />
+    <ClCompile Include="websocket.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\demo4-server\base64.h" />
-    <ClInclude Include="..\..\..\demo4-server\sha1.h" />
-    <ClInclude Include="..\..\..\demo4-server\websocket.h" />
+    <ClInclude Include="base64.h" />
+    <ClInclude Include="sha1.h" />
+    <ClInclude Include="websocket.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

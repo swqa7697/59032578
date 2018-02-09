@@ -15,28 +15,28 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\demo4-server\base64.cpp">
+    <ClCompile Include="base64.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\demo4-server\main.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\demo4-server\sha1.cpp">
+    <ClCompile Include="sha1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\demo4-server\websocket.cpp">
+    <ClCompile Include="websocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\demo4-server\base64.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="base64.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\demo4-server\sha1.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="sha1.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\demo4-server\websocket.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="websocket.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
