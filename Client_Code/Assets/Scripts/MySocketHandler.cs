@@ -35,6 +35,9 @@ namespace SocketHandler
             }
         }
 
-        
+        public static void Send(string type)
+        {
+            
+        }
     }
 }
