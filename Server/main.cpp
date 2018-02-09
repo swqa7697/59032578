@@ -35,9 +35,8 @@ void closeHandler(int clientID){
 
 /* called when a client sends a message to the server */
 void messageHandler(int clientID, string message){
-	vector<int> clientIDs = server.getClientIDs();
+	server.wsSend(clientID, message);
 
-   
 }
 
 /* called once per select() loop */
@@ -66,7 +65,7 @@ int main(int argc, char *argv[]){
     server.setOpenHandler(openHandler);
     server.setCloseHandler(closeHandler);
     server.setMessageHandler(messageHandler);
-    server.setPeriodicHandler(periodicHandler);
+  //  server.setPeriodicHandler(periodicHandler);
 
     /* start the Pong Game server, listen to Local IP and port '8000' */
     server.startServer(8000);
