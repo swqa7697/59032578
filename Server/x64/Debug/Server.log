@@ -1,0 +1,39 @@
+﻿  websocket.cpp
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(91): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'LPVOID'
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(115): error C2039: 'getTimeStamp': is not a member of 'wsClient'
+  e:\documents\workspace\ics 167\pong game\server\websocket.h(51): note: see declaration of 'wsClient'
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(156): error C2039: 'calculateLatency': is not a member of 'wsClient'
+  e:\documents\workspace\ics 167\pong game\server\websocket.h(51): note: see declaration of 'wsClient'
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(204): error C2065: 'networkDelay': undeclared identifier
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(206): error C2065: 'networkDelay': undeclared identifier
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(257): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(263): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(287): warning C4267: '=': conversion from 'size_t' to 'char', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(296): warning C4267: '=': conversion from 'size_t' to 'char', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(297): warning C4267: '=': conversion from 'size_t' to 'char', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(310): warning C4267: '=': conversion from 'size_t' to 'char', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(311): warning C4267: '=': conversion from 'size_t' to 'char', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(312): warning C4267: '=': conversion from 'size_t' to 'char', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(313): warning C4267: '=': conversion from 'size_t' to 'char', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(318): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(369): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(382): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(395): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(534): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(687): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(689): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(789): warning C4244: '=': conversion from 'SOCKET' to 'int', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(820): warning C4244: 'initializing': conversion from 'SOCKET' to 'int', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\websocket.cpp(827): warning C4473: 'printf' : not enough arguments passed for format string
+  e:\documents\workspace\ics 167\pong game\server\websocket.cpp(827): note: placeholders and their parameters expect 2 variadic arguments, but 1 were provided
+  e:\documents\workspace\ics 167\pong game\server\websocket.cpp(827): note: the missing variadic argument 2 is required by format string '%d'
+  sha1.cpp
+e:\documents\workspace\ics 167\pong game\server\sha1.cpp(226): warning C4267: '+=': conversion from 'size_t' to 'unsigned char', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\sha1.cpp(233): warning C4267: '+=': conversion from 'size_t' to 'unsigned char', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\sha1.cpp(264): warning C4267: '+=': conversion from 'size_t' to 'unsigned char', possible loss of data
+  main.cpp
+  base64.cpp
+e:\documents\workspace\ics 167\pong game\server\base64.cpp(85): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\base64.cpp(96): warning C4267: '=': conversion from 'size_t' to 'unsigned char', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\base64.cpp(113): warning C4267: '=': conversion from 'size_t' to 'unsigned char', possible loss of data
+  Generating Code...
