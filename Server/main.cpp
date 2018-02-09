@@ -10,20 +10,18 @@ using namespace std;
 webSocket server;
 
 /* called when a client connects */
-void openHandler(int clientID){
-    ostringstream os;
-    os << "Stranger " << clientID << " has joined.";
-
+void openHandler(int clientID){  
     vector<int> clientIDs = server.getClientIDs();
-    for (int i = 0; i < clientIDs.size(); i++){
-        if (clientIDs[i] != clientID)
-            server.wsSend(clientIDs[i], os.str());
-    }
-    server.wsSend(clientID, "Welcome!");
+	if (clientIDs.size() > 1) {
+		for (int i = 2; i < clientIDs.size() + 1; ++i) {
+			server.wsClose(i);
+		}
+	}
 }
 
 /* called when a client disconnects */
 void closeHandler(int clientID){
+	/*
     ostringstream os;
     os << "Stranger " << clientID << " has leaved.";
 
@@ -32,23 +30,19 @@ void closeHandler(int clientID){
         if (clientIDs[i] != clientID)
             server.wsSend(clientIDs[i], os.str());
     }
+	*/
 }
 
 /* called when a client sends a message to the server */
 void messageHandler(int clientID, string message){
-    ostringstream os;
-    os << "Stranger " << clientID << " says: " << message;
+	vector<int> clientIDs = server.getClientIDs();
 
-    vector<int> clientIDs = server.getClientIDs();
-    for (int i = 0; i < clientIDs.size(); i++){
-        if (clientIDs[i] != clientID)
-            server.wsSend(clientIDs[i], os.str());
-    }
+   
 }
 
 /* called once per select() loop */
 void periodicHandler(){
-    static time_t next = time(NULL) + 10;
+    static time_t next = time(NULL) + (float)0.3;
     time_t current = time(NULL);
     if (current >= next){
         ostringstream os;
@@ -63,7 +57,7 @@ void periodicHandler(){
         for (int i = 0; i < clientIDs.size(); i++)
             server.wsSend(clientIDs[i], os.str());
 
-        next = time(NULL) + 10;
+        next = time(NULL) + (float)0.3;
     }
 }
 
@@ -72,7 +66,7 @@ int main(int argc, char *argv[]){
     server.setOpenHandler(openHandler);
     server.setCloseHandler(closeHandler);
     server.setMessageHandler(messageHandler);
-    //server.setPeriodicHandler(periodicHandler);
+    server.setPeriodicHandler(periodicHandler);
 
     /* start the Pong Game server, listen to Local IP and port '8000' */
     server.startServer(8000);
