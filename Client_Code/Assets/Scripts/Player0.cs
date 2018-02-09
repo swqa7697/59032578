@@ -17,10 +17,10 @@ public class Player0: MonoBehaviour
 	
 	private void FixedUpdate()
     {
-        move();
+        Move();
 	}
 
-    private void move()
+    private void Move()
     {
         Vector2 input = Vector2.zero;
         if (Input.GetKey(KeyCode.LeftArrow))

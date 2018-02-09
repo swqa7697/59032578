@@ -1,11 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using SocketHandler;
 
 public class Ball: MonoBehaviour
 {
     public float mySpeed; //will use server
+
+    //for debug
+    public Text text0;
+    private int score0 = 0;
 
     private Rigidbody2D myRigidbody;
     private Vector2 myDirection; //server
@@ -28,6 +33,11 @@ public class Ball: MonoBehaviour
             myDirection.y = -myDirection.y; //will call server
         if (other.gameObject.tag == "Left_right_edge")
             myDirection.x = -myDirection.x; //will call server
+        if (other.gameObject.tag == "ThisPlayer")
+        {
+            myDirection.y = -myDirection.y; //Will call server
+            text0.text = "AAA's\nScore: "+ ++score0;
+        }
     }
 
     private void Move()

@@ -13,7 +13,7 @@ public class Score0: MonoBehaviour
         text = GetComponent<Text>();
 	}
 	
-	void Update()
+	private void Update()
     {
 		
 	}

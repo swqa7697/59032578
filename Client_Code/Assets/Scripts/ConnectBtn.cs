@@ -12,9 +12,19 @@ public class ConnectBtn: MonoBehaviour
     public InputField inputPort;
     public Text status;
 
+    private bool debug = true;
+
+    private void Awake()
+    {
+        Screen.SetResolution(1920, 1080, false);
+    }
+
     public void Connect()
     {
-        MySocketHandler.GetAddress(inputIP.text, int.Parse(inputPort.text));
+        if (debug)
+            SceneManager.LoadScene("Main", LoadSceneMode.Single);
+
+        MySocketHandler.SetAddress(inputIP.text, int.Parse(inputPort.text));
 
         string s = MySocketHandler.Connect(inputName.text);
         if (s != "")

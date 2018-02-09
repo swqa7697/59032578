@@ -13,7 +13,7 @@ namespace SocketHandler
         private static int tries = 0;
         private static string player0;
 
-        public static void GetAddress(string ip, int port)
+        public static void SetAddress(string ip, int port)
         {
             myIP = IPAddress.Parse(ip);
             myPort = port;
@@ -35,6 +35,6 @@ namespace SocketHandler
             }
         }
 
-
+        
     }
 }
