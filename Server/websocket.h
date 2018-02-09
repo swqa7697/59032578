@@ -65,6 +65,9 @@ public:
         MessageBufferLength = 0;
     }
 
+	std::string getTimeStamp();
+	int calculateLatency(std::string timeData);
+
 	int networkDelay;
     int socket;                            // client socket
     string MessageBuffer;                  // a blank string when there's no incoming frames
