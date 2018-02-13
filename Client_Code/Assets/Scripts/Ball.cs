@@ -10,7 +10,7 @@ public class Ball: MonoBehaviour
 
     //for debug
     public Text text0;
-    private int score0 = 0;
+    private int score0 = 0; //will get from server
 
     private Rigidbody2D myRigidbody;
     private Vector2 myDirection; //server
