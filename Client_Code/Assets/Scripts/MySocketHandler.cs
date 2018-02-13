@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 
 namespace SocketHandler
 {
     public class MySocketHandler
     {
-        public static Socket mySocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        private static Socket mySocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         private static IPAddress myIP;
         private static int myPort;
 
-        private static int tries = 0;
         private static string player0;
+        private static int tries = 0;
 
         public static void SetAddress(string ip, int port)
         {
@@ -35,9 +36,19 @@ namespace SocketHandler
             }
         }
 
-        public static void Send(string type)
+        public static void Send(string data)
         {
-            
+            mySocket.Send(Encoding.ASCII.GetBytes(data));
+        }
+
+        public static string Receive()
+        {
+            return "pass";
+        }
+
+        public static string GetID0()
+        {
+            return player0;
         }
     }
 }

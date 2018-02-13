@@ -34,5 +34,9 @@ public class Player0: MonoBehaviour
         newPosition = new Vector2(Mathf.Clamp(newPosition.x, xMin, xMax), -4.8f);
 
         myRigidbody.MovePosition(newPosition);
+
+        //Send the position to Server
+        newPosition = Camera.main.WorldToScreenPoint(newPosition);
+        MySocketHandler.Send("P0 " + Mathf.RoundToInt(newPosition.x));
     }
 }

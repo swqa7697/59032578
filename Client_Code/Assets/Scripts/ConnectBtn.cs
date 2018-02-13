@@ -12,7 +12,7 @@ public class ConnectBtn: MonoBehaviour
     public InputField inputPort;
     public Text status;
 
-    private bool debug = true;
+    private bool debug = false;
 
     private void Awake()
     {
