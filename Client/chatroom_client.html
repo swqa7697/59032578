@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset='UTF-8' />
+	<style>
+		input, textarea {border:1px solid #CCC;margin:0px;padding:0px}
+
+        #ip {line-height:20px}
+        #port {line-height:20px}
+		#body {max-width:800px;margin:auto}
+		#log {width:100%;height:400px}
+		#message {width:100%;line-height:20px}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="fancywebsocket.js"></script>
+	<script>
+		var Server;
+
+		function log( text ) {
+			$log = $('#log');
+			//Add text to log
+			$log.append(($log.val()?"\n":'')+text);
+			//Autoscroll
+			$log[0].scrollTop = $log[0].scrollHeight - $log[0].clientHeight;
+		}
+
+		function send( text ) {
+			Server.send( 'message', text );
+		}
+		
+		function getPort(){
+			var m_ports = document.getElementsByName('port');
+			for(var i=0;i<m_ports.length;i++)
+				if(m_ports[i].checked)
+					return m_ports[i].value;
+		}
+
+        function connect(){
+            log('Connecting...');
+			Server = new FancyWebSocket('ws://' + document.getElementById('ip').value + ':' + getPort());
+
+			$('#message').keypress(function(e) {
+				if ( e.keyCode == 13 && this.value ) {
+					log( 'You: ' + this.value );
+					send( this.value );
+
+					$(this).val('');
+				}
+			});
+
+			//Let the user know we're connected
+			Server.bind('open', function() {
+				document.getElementById("ip").disabled = true;
+				disablePortSelection(true);
+                document.getElementById("cntBtn").disabled = true;
+				document.getElementById("dcntBtn").disabled = false;
+				document.getElementById("message").disabled = false;
+				log( "Connected." );
+			});
+
+			//OH NOES! Disconnection occurred.
+			Server.bind('close', function( data ) {
+				document.getElementById("ip").disabled = false;
+				disablePortSelection(false);
+                document.getElementById("cntBtn").disabled = false;
+				document.getElementById("dcntBtn").disabled = true;
+				document.getElementById("message").disabled = true;
+				log( "Disconnected." );
+			});
+
+			//Log any messages sent from server
+			Server.bind('message', function( payload ) {
+				log( payload );
+			});
+
+			Server.connect();
+        }
+		
+		function disconnect(){
+			Server.disconnect();
+		}
+		
+		function disablePortSelection(val){
+			var m_ports = document.getElementsByName('port');
+			for(var i=0;i<m_ports.length;i++)
+				m_ports[i].disabled = val;
+		}
+
+	</script>
+</head>
+
+<body>
+	<div id='body'>
+        Server ip: <input type='text' id='ip' name='ip'><br/>
+		<input type="radio" id='channel1' name='port' value='8000'>Channel/Port 1</input>
+		<input type="radio" id='channel2' name='port' value='8001'>Channel/Port 2</input>
+		<input type="radio" id='channel3' name='port' value='8002'>Channel/Port 3</input>
+		<input type="radio" id='channel4' name='port' value='8003'>Channel/Port 4</input><br/>
+        <button type="button" id='cntBtn' onclick="connect();">Connect</button>
+		<button type="button" id='dcntBtn' onclick="disconnect();" disabled=true>Disconnect</button>
+		<textarea id='log' name='log' readonly='readonly'></textarea><br/>
+		<input type='text' id='message' name='message' disabled=true />
+	</div>
+</body>
+
+</html>

@@ -53,7 +53,7 @@ struct Ball {
 };
 
 
-
+/*
 struct Paddle {
 	int w = 100;
 	int h = 5;
@@ -73,10 +73,11 @@ struct Paddle {
 		name = n;
 	}
 };
+*/
 
 Ball ball;
 
-Paddle player;
+//Paddle player;
 
 
 
