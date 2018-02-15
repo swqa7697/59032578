@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset='UTF-8' />
+		<script src="pong.js"></script>
+		<script src="fancywebsocket.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script>
+			var Server;
+			
+			var ball = new Ball(width/2, height/2);
+			var player = new Player();
+			var score = new Score();
+			
+			var start = function(){
+				document.getElementById('game').appendChild(canvas);
+				animate(step);
+			};
+
+			var step = function(){
+				update();
+				render();
+				animate(step);
+			};
+
+			var update = function(){
+				player.update();
+				send("P0 "+player.getX()+" "+player.getY());
+			};
+
+			var render = function(){
+				context.fillStyle = "#CCCCCC";
+				context.fillRect(0, 0, width, height);
+				ball.render();
+				player.render();
+				score.render(score.name + "'s Score: " + score.score);
+			};
+			
+			function send(text){
+				Server.send('message', text);
+			}
+
+			function connect(){
+				try{
+					Server = new FancyWebSocket('ws://' + document.getElementById('ip').value + ':' + document.getElementById('port').value);
+				}catch(error){
+					score.render("Failed to Connect");
+				}
+				
+				//Start game when connected
+				Server.bind('open', function(){
+					score.setName(document.getElementById('name').value);
+					send("N0 "+score.getName());
+					var inputSection = document.getElementById('text_input');
+					document.body.removeChild(inputSection);
+					start();
+				});
+
+				//OH NOES! Disconnection occurred.
+				Server.bind('close', function(data){
+					score.render("Failed to Connect");
+				});
+
+				//Resolve commands sent from server
+				Server.bind('message', function(payload){
+					var lines = payload.trim().split("\n");
+					for(line in lines){
+						var sub = line.trim().split(" ");
+						
+						if(sub[0] == "BP")
+							ball.setPosition(parseInt(sub[1]), parseInt(sub[2]));
+						else if(sub[0] == "S0")
+							score.score = parseInt(sub[1]);
+					}
+				});
+
+				Server.connect();
+			}
+		</script>
+	</head>
+<body>
+	<div id='text_input'>
+		Your Name: <input type='text' id='name' name='name'>
+		Server IP: <input type='text' id='ip' name='ip'>
+		Port: <input type='text' id='port' name='port'>
+		<button type='button' id='cntBtn' onclick='connect();'>Connect/Start</button><br/>
+	</div>
+	<div id='game'></div>
+</body>
+</html>
