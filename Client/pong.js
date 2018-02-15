@@ -41,11 +41,18 @@ Paddle.prototype.render = function(){
 };
 
 Paddle.prototype.move = function(movement){
-	this.x += movement;
+	if(movement!=0){
+		this.x += movement;
+		if(this.x < 0)
+			this.x = 0;
+		else if(this.x+this.width > width)
+			this.x = width - this.width;
+	}
 };
 
 function Player(){
 	this.paddle = new Paddle(200, 490, 100, 5);
+	this.speed = 2;
 }
 
 Player.prototype.getX = function(){
@@ -64,9 +71,9 @@ Player.prototype.update = function(){
 	for(var key in keysInput){
 		var value = Number(key);
 		if(value == 37)			//Left Arrow
-			this.paddle.move(-5);
+			this.paddle.move(-this.speed);
 		else if(value == 39)	//Right Arrow
-			this.paddle.move(5);
+			this.paddle.move(this.speed);
 		else
 			this.paddle.move(0);
 	}
@@ -113,5 +120,5 @@ var animate = window.requestAnimationFrame ||
 				  window.setTimeout(callback, 1000/60)
 			  };
 
-window.addEventListener("keyDown", function(event){ keysInput[event.keyCode] = true; });
-window.addEventListener("keyUP", function(event){ delete keysInput[event.keyCode]; });
+window.addEventListener("keydown", function(event){ keysInput[event.keyCode] = true; });
+window.addEventListener("keyup", function(event){ delete keysInput[event.keyCode]; });

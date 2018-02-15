@@ -12,74 +12,7 @@ using namespace std;
 
 webSocket server;
 
-std::pair<int, int> pos;
-
-struct Ball {
-	int w = 10;
-	int h = 10;
-	int posx;
-	int posy;
-	int speed;
-	int acc;
-	int vx = 0;
-	int vy = 0;
-	int maxangle = 45;
-
-	Ball() {}
-
-
-	Ball(int positionx, int positiony, int initialspeed, int angle) {
-		posx = positionx;
-		posy = positiony;
-		speed = initialspeed;
-		velocity(angle);
-	}
-
-	void velocity(float angle) {
-		float radians = angle * 3.14159265 / 180;		
-		vx = speed * (int)sin(radians);		
-		vy = -speed * (int)cos(radians);	
-	}
-
-	void paddleCollision(int paddleX, int paddleWidth) {
-		float paddleCenterX = paddleX + paddleWidth / 2;
-
-		float disFromCenter = (posx + (w / 2)) - paddleCenterX; //ballCenterX - paddleCenterX
-
-		float ratio = disFromCenter / (paddleWidth / 2);
-
-		velocity(maxangle * ratio);
-	}
-};
-
-
-/*
-struct Paddle {
-	int w = 100;
-	int h = 5;
-	int posx;
-	int posy;
-	int speed = 1; 
-	int score = 0;
-	string name = "player1";
-
-	Paddle() {}
-
-	Paddle(int Width, int Height, int positionX, int positionY, string n) {
-		w = Width;
-		h = Height;
-		posx = positionX;
-		posy = positionY;
-		name = n;
-	}
-};
-*/
-
-Ball ball;
-
-//Paddle player;
-
-
+Ball ball = Ball(5, 250, 250);
 
 /* called when a client connects */
 void openHandler(int clientID){  
