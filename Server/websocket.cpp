@@ -821,6 +821,7 @@ void webSocket::startServer(int port){
                         if (newfd != -1){
                             /* add new client */
                             wsAddClient(newfd, cli_addr.sin_addr);
+							
                             //Deprecated ntoa API
 							//printf("New connection from %s on socket %d\n", inet_ntoa(cli_addr.sin_addr), newfd);
 							char cli_addr_str[INET_ADDRSTRLEN];

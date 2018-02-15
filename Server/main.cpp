@@ -13,12 +13,16 @@ using namespace std;
 webSocket server;
 
 Ball ball = Ball(5, 250, 250);
+Paddle player(100, 5, 200, 490);
 
 /* called when a client connects */
 void openHandler(int clientID){  
+	ostringstream os;
+	os << "One player has begun the game";
     vector<int> clientIDs = server.getClientIDs();
 	if (clientIDs.size() > 1) {
-		for (int i = 2; i < clientIDs.size() + 1; ++i) {
+		for (int i = 2; i < clientIDs.size() + 1; ++i) {			
+			server.wsSend(clientIDs[i], os.str());
 			server.wsClose(i);
 		}
 	}
@@ -28,7 +32,7 @@ void openHandler(int clientID){
 void closeHandler(int clientID){
 	
     ostringstream os;
- 
+	
 	
     vector<int> clientIDs = server.getClientIDs();
     for (int i = 0; i < clientIDs.size(); i++){
@@ -42,13 +46,27 @@ void closeHandler(int clientID){
 void messageHandler(int clientID, string message){
 	ostringstream os;
 	vector<int> clientIDs = server.getClientIDs();
+	if (message[0] == 'N') {
+		for (int i = 0; i < message.size(); ++i) {
+			if (message[i] == ' ') {
+				i++;
+				for (int i = 0; i < message.size(); ++i) {
+					player.name += message[i];
+				}
+				break;
+			}
+		}
+	}
+	if (message[0] == 'P') {
 
+	}
 	if (message == "l") {
+		
 		player.posx = fmin(0, player.posx - player.speed);
 	
 	}
 	if (message == "r") {
-		player.posx = fmax(pos.first - player.posx, player.posx + player.speed);
+		player.posx = fmax(500 - player.posx, player.posx + player.speed);
 	}
 
 }
@@ -58,36 +76,39 @@ void periodicHandler(){
     static time_t next = time(NULL) + (float)0.3;
     time_t current = time(NULL);
     if (current >= next){
-		ball.posx += ball.vx;
-		ball.posy += ball.vy;
+		ball.posx += ball.x_speed;
+		ball.posy += ball.y_speed;
 
-		if ((ball.vx < 0 && ball.posx < 0) ||
-			(ball.vx > 0 && ball.posx + ball.w * 0.5 > pos.first)) {
-			ball.vx = -ball.vx;
+		if ((ball.x_speed < 0 && ball.posx <= 5) ||
+			(ball.x_speed > 0 && ball.posx >= 495)) {
+			ball.x_speed = -ball.x_speed;
 		}
 
 
-		if (ball.vy < 0) {
-			if (ball.posy < 0) {
-				ball.vy = -ball.vy;
+		if (ball.y_speed < 0) {
+			if (ball.posy <= 5) {
+				ball.y_speed = -ball.y_speed;
 			}
 		}
 		else {
-			if (player.posy < ball.posy + ball.h * 0.5) {
+			if (player.posy >= ball.posy) {
 				//collision distance
-				int d = ball.posy + ball.h * 0.5 - player.posy;
+				int d = player.posy - ball.posy;
 				//time
-				int t = d / ball.vy;
+				int t = d / ball.y_speed;
+				if (t < 0) {
+					t = -t;
+				}
 				//x translate
-				int x = ball.vx * t + (ball.posx - ball.vx);
-				if (x >= player.posx && x + ball.w <= player.posx + player.w)
+				int x = ball.x_speed * t + (ball.posx - ball.x_speed);
+				if (x >= player.posx && x <= player.posx + player.w)
 				{
-					ball.vy = -ball.vy;
+					ball.y_speed = -ball.y_speed;
 					player.score++;
 				}
 			}
-			if (ball.posy > pos.second)
-				ball.vy = -ball.vy;
+			if (ball.posy < 5)
+				ball.y_speed = -ball.y_speed;
 		}
         ostringstream os;
 		os << "BP " << ball.posx << " " << ball.posy << "\n";
@@ -102,15 +123,14 @@ void periodicHandler(){
 }
 
 int main(int argc, char *argv[]){
-	pos.first = 1024;
-	pos.second = 768;
-	ball.posx = pos.first * 0.5;
-	ball.posy = pos.second * 0.5;
-	ball.vx = 8;
-	ball.vy = 8;
+	
+	ball.posx = 250;
+	ball.posy = 250;
+	ball.x_speed = 8;
+	ball.y_speed = 8;
 
-	player.posx = pos.first * 0.5;
-	player.posy = pos.second;
+	player.posx = 250;
+	player.posy = 500;
     /* set event handler */
     server.setOpenHandler(openHandler);
     server.setCloseHandler(closeHandler);
@@ -118,7 +138,7 @@ int main(int argc, char *argv[]){
     server.setPeriodicHandler(periodicHandler);
 
     /* start the Pong Game server, listen to Local IP and port '8000' */
-    server.startServer(8888);
+    server.startServer(8000);
 
     return 1;
 }

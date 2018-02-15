@@ -12,6 +12,7 @@
 #include <vector>
 #include <map>
 #include <time.h>
+#include <cmath>
 
 using namespace std;
 
@@ -51,7 +52,7 @@ typedef void (*messageCallback)(int, string);
 class wsClient{
 public:
     wsClient(int _socket, in_addr _addr){
-		paddle = Paddle(100, 5, 200, 490);
+		//paddle = Paddle(100, 5, 200, 490);
         socket = _socket;
         MessageBuffer.clear();
         ReadyState = WS_READY_STATE_CONNECTING;
@@ -69,7 +70,7 @@ public:
 	std::string getTimeStamp();
 	int calculateLatency(std::string timeData);
 
-	Paddle paddle;
+	//Paddle paddle;
 	int networkDelay;
     int socket;                            // client socket
     string MessageBuffer;                  // a blank string when there's no incoming frames
@@ -86,7 +87,7 @@ public:
 	clock_t timeElapsed;                   // the amount of time passed since playing the game. default value should be 0 before the start of the game
 };
 
-std::pair<int, int> pos;
+//std::pair<int, int> pos;
 
 struct Ball {
 	int radius = 5;
@@ -94,33 +95,33 @@ struct Ball {
 	int posy = 250;
 	int x_speed;
 	int y_speed;
-	int acc;
-	int vx = 0;
-	int vy = 0;
-	int maxangle = 45;
+	
+	int vx = 0;  //speed of x
+	int vy = 0;	//speed of y
+//	int maxangle = 45;
 
 	Ball() {
 		radius = 1;
 		posx = 0;
 		posy = 0;
-		/*x_speed = 0;
-		y_speed = 0;*/ 这里生成两个随机数
-		acc = 0;		//?
+		x_speed = 0;
+		y_speed = 0; //这里生成两个随机数
+//		acc = 0;		//?
 		vx = 0;			//?
 		vy = 0;			//?
-		maxangle = 45;	//?
+//		maxangle = 45;	//?
 	}
 
 	Ball(int radius, int positionx, int positiony) {
 		radius = radius;
 		posx = positionx;
 		posy = positiony;
-		/*x_speed = x_speed;
-		y_speed = y_speed;*/ 这里生成两个随机数
-		acc = 0;		//?
+		x_speed = rand() * 6 + 5;
+		y_speed = rand() * 6 + 5; //这里生成两个随机数
+//		acc = 0;		//?
 		vx = 0;			//?
 		vy = 0;			//?
-		maxangle = 45;	//?
+//		maxangle = 45;	//?
 	}
 
 	/*void paddleCollision(int paddleX, int paddleWidth) {
@@ -141,6 +142,7 @@ struct Paddle {
 	int posx;
 	int posy;
 	int score;
+	int speed;
 
 	Paddle() {
 		name = "";
@@ -149,6 +151,7 @@ struct Paddle {
 		posx = 0;
 		posy = 0;
 		score = 0;
+	
 	}
 
 	Paddle(int Width, int Height, int positionX, int positionY) {
