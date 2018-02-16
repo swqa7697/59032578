@@ -12,13 +12,19 @@ using namespace std;
 
 webSocket server;
 
-Ball ball = Ball(5, 250.0, 250.0);
-Paddle player0 = Paddle(100, 5, 200, 490);
+Ball ball;
+Paddle player0;
 int activeID;
+bool inGame = false;
+
+int interval_clocks = CLOCKS_PER_SEC * INTERVAL_MS / 1000;
 
 /* called when a client connects */
 void openHandler(int clientID){
+	ball = Ball(5, 250.0, 250.0);
+	player0 = Paddle(100, 5, 200, 490);
 	activeID = clientID;
+	inGame = true;
 	printf("Player %d has begun the game\n", clientID);
 }
 
@@ -36,55 +42,45 @@ void messageHandler(int clientID, string message){
 		player0.name = message.substr(3);
 	}
 	if (message.substr(0,2) == "P0"){
-		
+		player0.posx = stoi(message.substr(3));
 	}
 }
 
 /* called once per select() loop */
-void periodicHandler(){
-    static time_t next = time(NULL) + (float)0.3;
-    time_t current = time(NULL);
-    if (current >= next){
-		ball.posx += ball.x_speed;
-		ball.posy += ball.y_speed;
+void periodicHandler() {
+	if (inGame)
+	{
+		static clock_t next = clock() + interval_clocks;
+		clock_t current = clock();
+		if (current >= next) {
+			ball.posx += ball.x_speed;
+			ball.posy += ball.y_speed;
 
-		if ((ball.x_speed < 0 && ball.posx <= 5) ||
-			(ball.x_speed > 0 && ball.posx >= 495)) {
-			ball.x_speed = -ball.x_speed;
-		}
-
-		if (ball.y_speed < 0) {
-			if (ball.posy <= 5) {
-				ball.y_speed = -ball.y_speed;
+			if ((ball.x_speed < 0 && ball.posx - ball.radius < 0) ||
+				(ball.x_speed > 0 && ball.posx + ball.radius > 500 )) {
+				ball.x_speed *= -1;
 			}
-		}
-		else {
-			if (player0.posy >= ball.posy) {
-				//collision distance
-				float d = player0.posy - ball.posy;
-				//time
-				float t = d / ball.y_speed;
-				if (t < 0) {
-					t = -t;
-				}
-				//x translate
-				float x = ball.x_speed * t + (ball.posx - ball.x_speed);
-				if (x >= player0.posx && x <= player0.posx + player0.w)
-				{
-					ball.y_speed = -ball.y_speed;
+
+			if ((ball.y_speed < 0 && ball.posy - ball.radius < 0) ||
+				(ball.y_speed > 0 && ball.posy + ball.radius > 500)) {
+				ball.y_speed *= -1;
+			}
+
+			if (ball.y_speed > 0 && ball.posy + ball.radius > 490) {
+				if (ball.posx > player0.posx && ball.posx < player0.posx + player0.w) {
+					ball.y_speed *= -1;
 					player0.score++;
 				}
 			}
-			if (ball.posy < 5)
-				ball.y_speed = -ball.y_speed;
+
+			ostringstream os;
+			os << "BP " << ball.posx << " " << ball.posy << "\n";
+			os << "S0 " << player0.score << "\n";
+			cout << os.str();
+			server.wsSend(activeID, os.str());
 		}
-        ostringstream os;
-		os << "BP " << ball.posx << " " << ball.posy << "\n";
-		os << "P0 " << player0.posx << " " << player0.posy << "\n";
-		os << "S0 " << player0.score << "\n";
-		server.wsSend(activeID, os.str());
-		}
-		next = time(NULL) + (float)0.3;
+		next = clock() + interval_clocks;
+	}
 }
 
 int main(int argc, char *argv[]){
@@ -92,7 +88,7 @@ int main(int argc, char *argv[]){
     server.setOpenHandler(openHandler);
     server.setCloseHandler(closeHandler);
     server.setMessageHandler(messageHandler);
-    server.setPeriodicHandler(periodicHandler);
+	server.setPeriodicHandler(periodicHandler);
 
     /* start the Pong Game server, listen to Local IP and port '8000' */
     server.startServer(8000);

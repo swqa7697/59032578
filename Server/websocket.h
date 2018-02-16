@@ -50,7 +50,9 @@ typedef void (*messageCallback)(int, string);
 #define WS_TIMEOUT_RECV 10
 #define WS_TIMEOUT_PONG 5
 
-#define BALL_SPEED_SCALE 1
+#define INTERVAL_MS 10
+
+#define BALL_SPEED_SCALE 2
 
 namespace
 {

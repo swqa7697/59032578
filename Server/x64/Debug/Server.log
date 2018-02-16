@@ -1,5 +1,2 @@
 ﻿  main.cpp
-e:\documents\workspace\ics 167\pong game\server\main.cpp(45): warning C4244: 'initializing': conversion from 'float' to 'time_t', possible loss of data
-e:\documents\workspace\ics 167\pong game\server\main.cpp(87): warning C4244: '=': conversion from 'float' to 'time_t', possible loss of data
-  LINK : E:\Documents\workspace\ICS 167\Pong Game\Server\x64\Debug\Server.exe not found or not built by the last incremental link; performing full link
   Server.vcxproj -> E:\Documents\workspace\ICS 167\Pong Game\Server\x64\Debug\Server.exe

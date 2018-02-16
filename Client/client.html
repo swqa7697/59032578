@@ -2,6 +2,13 @@
 <html>
 	<head>
 		<meta charset='UTF-8' />
+		<style>
+			input, textarea {border:1px solid #CCC;margin:0px;padding:0px}
+
+			#name {line-height:20px}
+			#ip {line-height:20px}
+			#port {line-height:20px}
+		</style>
 		<script src="pong.js"></script>
 		<script src="fancywebsocket.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -25,7 +32,7 @@
 
 			var update = function(){
 				player.update();
-				send("P0 "+player.getX()+" "+player.getY());
+				send("P0 "+player.getX());
 			};
 
 			var render = function(){
@@ -64,11 +71,11 @@
 				//Resolve commands sent from server
 				Server.bind('message', function(payload){
 					var lines = payload.trim().split("\n");
-					for(line in lines){
-						var sub = line.trim().split(" ");
+					for(var i = 0; i < lines.length; i++){
+						var sub = lines[i].trim().split(" ");
 						
 						if(sub[0] == "BP")
-							ball.setPosition(parseInt(sub[1]), parseInt(sub[2]));
+							ball.setPosition(parseFloat(sub[1]), parseFloat(sub[2]));
 						else if(sub[0] == "S0")
 							score.setScore(parseInt(sub[1]));
 					}
