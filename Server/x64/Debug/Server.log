@@ -1,9 +1,5 @@
 ﻿  main.cpp
-c:\users\kaifan\desktop\59032578\server\main.cpp(65): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-c:\users\kaifan\desktop\59032578\server\main.cpp(69): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-c:\users\kaifan\desktop\59032578\server\main.cpp(76): warning C4244: 'initializing': conversion from 'float' to 'time_t', possible loss of data
-c:\users\kaifan\desktop\59032578\server\main.cpp(121): warning C4244: '=': conversion from 'float' to 'time_t', possible loss of data
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  websocket.cpp
-  Server.vcxproj -> C:\Users\Kaifan\Desktop\59032578\Server\x64\Debug\Server.exe
+e:\documents\workspace\ics 167\pong game\server\main.cpp(45): warning C4244: 'initializing': conversion from 'float' to 'time_t', possible loss of data
+e:\documents\workspace\ics 167\pong game\server\main.cpp(87): warning C4244: '=': conversion from 'float' to 'time_t', possible loss of data
+  LINK : E:\Documents\workspace\ICS 167\Pong Game\Server\x64\Debug\Server.exe not found or not built by the last incremental link; performing full link
+  Server.vcxproj -> E:\Documents\workspace\ICS 167\Pong Game\Server\x64\Debug\Server.exe
