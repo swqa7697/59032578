@@ -58,14 +58,14 @@ namespace
 {
 	random_device device;
 	default_random_engine engine(device());
-	uniform_real_distribution<float> distribution(-1.0, 1.0);
+	uniform_real_distribution<double> distribution(-1.0, 1.0);
 
 	float rd(){
 		return distribution(engine);
 	}
 
-	void scaledNormalize(float &x, float &y){
-		float z = sqrt(x*x + y*y);
+	void scaledNormalize(double &x, double &y){
+		double z = sqrt(x*x + y*y);
 
 		x /= z;
 		x *= BALL_SPEED_SCALE;
@@ -112,66 +112,35 @@ public:
 };
 
 struct Ball {
-	int radius;
-	float posx;
-	float posy;
-	float x_speed;
-	float y_speed;
+	double radius;
+	double x;
+	double y;
+	double x_speed;
+	double y_speed;
 
-	Ball() {
-		radius = 1;
-		posx = 0.0;
-		posy = 0.0;
-		x_speed = rd();
-		y_speed = rd();
+	Ball():
+		radius(0.5), x(0), y(0), x_speed(rd()), y_speed(rd()) {
 		scaledNormalize(x_speed, y_speed);
 	}
 
-	Ball(int radius, float positionx, float positiony) {
-		radius = radius;
-		posx = positionx;
-		posy = positiony;
-		x_speed = rd();
-		y_speed = rd();
+	Ball(double radius, double positionx, double positiony):
+		radius(radius), x(positionx), y(positiony), x_speed(rd()), y_speed(rd()) {
 		scaledNormalize(x_speed, y_speed);
 	}
-
-	/*void paddleCollision(int paddleX, int paddleWidth) {
-		float paddleCenterX = paddleX + paddleWidth / 2;
-
-		float disFromCenter = (posx + (w / 2)) - paddleCenterX; //ballCenterX - paddleCenterX
-
-		float ratio = disFromCenter / (paddleWidth / 2);
-
-		velocity(maxangle * ratio);
-	}*/
 };
 
 struct Paddle {
 	string name;
-	int w;
-	int h;
-	int posx;
-	int posy;
+	int length;
+	int x;
+	int y;
 	int score;
 
-	Paddle() {
-		name = "";
-		w = 0;
-		h = 0;
-		posx = 0;
-		posy = 0;
-		score = 0;
-	}
+	Paddle():
+		name(""), length(0), x(0), y(0), score(0) {}
 
-	Paddle(int Width, int Height, int positionX, int positionY) {
-		name = "";
-		w = Width;
-		h = Height;
-		posx = positionX;
-		posy = positionY;
-		score = 0;
-	}
+	Paddle(int Length, int posX, int posY):
+		name(""), length(Length), x(posX), y(posY), score(0) {}
 };
 
 class webSocket{

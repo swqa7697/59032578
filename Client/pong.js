@@ -8,8 +8,6 @@ canvas.width = width;
 canvas.height = height;
 var context = canvas.getContext('2d');
 
-var scoreDisplay = document.createTextNode("Test");
-
 function Ball(x, y){
 	this.x = x;
 	this.y = y;
@@ -82,7 +80,6 @@ Player.prototype.update = function(){
 function Score(){
 	this.name = "";
 	this.score = 0;
-	this.print = true;
 }
 
 Score.prototype.setName = function(name){
@@ -95,22 +92,10 @@ Score.prototype.getName = function(){
 
 Score.prototype.setScore = function(score){
 	this.score = score;
-	this.print = true;
 };
 
-Score.prototype.render = function(msg){
-	if(this.print){
-		try{
-			document.body.removeChild(scoreSection);
-		}catch(error){}
-		
-		var scoreSection = document.createElement("P");
-		var scoreDisplay = document.createTextNode(msg);
-		scoreSection.appendChild(scoreDisplay);
-		document.body.appendChild(scoreSection);
-		
-		this.print = false;
-	}
+Score.prototype.render = function(){
+	document.getElementById('score').innerHTML = this.name + "'s Score: " + this.score;
 };
 
 var animate = window.requestAnimationFrame ||

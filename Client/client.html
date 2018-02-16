@@ -40,7 +40,7 @@
 				context.fillRect(0, 0, width, height);
 				ball.render();
 				player.render();
-				score.render(score.name + "'s Score: " + score.score);
+				score.render();
 			};
 			
 			function send(text){
@@ -65,7 +65,7 @@
 
 				//OH NOES! Disconnection occurred.
 				Server.bind('close', function(data){
-					score.render("Failed to Connect");
+					document.getElementById('score').innerHTML = "Failed to Connect";
 				});
 
 				//Resolve commands sent from server
@@ -93,5 +93,6 @@
 		<button type='button' id='cntBtn' onclick='connect();'>Connect/Start</button><br/>
 	</div>
 	<div id='game'></div>
+	<p id='score'>...</p>
 </body>
 </html>

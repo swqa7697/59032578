@@ -713,8 +713,10 @@ bool webSocket::wsProcessClient(int clientID, char *buffer, int bufferLength){
 		
 		// Deny service to incoming requests to start a game, when one game is already in progress
 		for(int i = 0; i < wsClients.size(); i++){
-			if (wsClients[i] != NULL && wsClients[i]->ReadyState == WS_READY_STATE_OPEN)
+			if (wsClients[i] != NULL && wsClients[i]->ReadyState == WS_READY_STATE_OPEN) {
+				printf("Denying the connection. Reason: Game has already started. ");
 				return false;
+			}
 		}
 
         result = wsProcessClientHandshake(clientID, buffer);
