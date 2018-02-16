@@ -710,6 +710,13 @@ bool webSocket::wsProcessClient(int clientID, char *buffer, int bufferLength){
     }
     else if (wsClients[clientID]->ReadyState == WS_READY_STATE_CONNECTING){
         // handshake not completed
+		
+		// Deny service to incoming requests to start a game, when one game is already in progress
+		for(int i = 0; i < wsClients.size(); i++){
+			if (wsClients[i] != NULL && wsClients[i]->ReadyState == WS_READY_STATE_OPEN)
+				return false;
+		}
+
         result = wsProcessClientHandshake(clientID, buffer);
         if (result){
             if (callOnOpen != NULL)

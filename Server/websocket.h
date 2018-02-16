@@ -12,6 +12,7 @@
 #include <vector>
 #include <map>
 #include <time.h>
+#include <random>
 #include <cmath>
 
 using namespace std;
@@ -49,10 +50,32 @@ typedef void (*messageCallback)(int, string);
 #define WS_TIMEOUT_RECV 10
 #define WS_TIMEOUT_PONG 5
 
+#define BALL_SPEED_SCALE 1
+
+namespace
+{
+	random_device device;
+	default_random_engine engine(device());
+	uniform_real_distribution<float> distribution(-1.0, 1.0);
+
+	float rd(){
+		return distribution(engine);
+	}
+
+	void scaledNormalize(float &x, float &y){
+		float z = sqrt(x*x + y*y);
+
+		x /= z;
+		x *= BALL_SPEED_SCALE;
+
+		y /= z;
+		y *= BALL_SPEED_SCALE;
+	}
+}
+
 class wsClient{
 public:
     wsClient(int _socket, in_addr _addr){
-		//paddle = Paddle(100, 5, 200, 490);
         socket = _socket;
         MessageBuffer.clear();
         ReadyState = WS_READY_STATE_CONNECTING;
@@ -70,7 +93,6 @@ public:
 	std::string getTimeStamp();
 	int calculateLatency(std::string timeData);
 
-	//Paddle paddle;
 	int networkDelay;
     int socket;                            // client socket
     string MessageBuffer;                  // a blank string when there's no incoming frames
@@ -87,41 +109,29 @@ public:
 	clock_t timeElapsed;                   // the amount of time passed since playing the game. default value should be 0 before the start of the game
 };
 
-//std::pair<int, int> pos;
-
 struct Ball {
-	int radius = 5;
-	int posx = 250;
-	int posy = 250;
-	int x_speed;
-	int y_speed;
-	
-	int vx = 0;  //speed of x
-	int vy = 0;	//speed of y
-//	int maxangle = 45;
+	int radius;
+	float posx;
+	float posy;
+	float x_speed;
+	float y_speed;
 
 	Ball() {
 		radius = 1;
-		posx = 0;
-		posy = 0;
-		x_speed = 0;
-		y_speed = 0; //这里生成两个随机数
-//		acc = 0;		//?
-		vx = 0;			//?
-		vy = 0;			//?
-//		maxangle = 45;	//?
+		posx = 0.0;
+		posy = 0.0;
+		x_speed = rd();
+		y_speed = rd();
+		scaledNormalize(x_speed, y_speed);
 	}
 
-	Ball(int radius, int positionx, int positiony) {
+	Ball(int radius, float positionx, float positiony) {
 		radius = radius;
 		posx = positionx;
 		posy = positiony;
-		x_speed = rand() * 6 + 5;
-		y_speed = rand() * 6 + 5; //这里生成两个随机数
-//		acc = 0;		//?
-		vx = 0;			//?
-		vy = 0;			//?
-//		maxangle = 45;	//?
+		x_speed = rd();
+		y_speed = rd();
+		scaledNormalize(x_speed, y_speed);
 	}
 
 	/*void paddleCollision(int paddleX, int paddleWidth) {
@@ -142,7 +152,6 @@ struct Paddle {
 	int posx;
 	int posy;
 	int score;
-	int speed;
 
 	Paddle() {
 		name = "";
@@ -151,7 +160,6 @@ struct Paddle {
 		posx = 0;
 		posy = 0;
 		score = 0;
-	
 	}
 
 	Paddle(int Width, int Height, int positionX, int positionY) {
