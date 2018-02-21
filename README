@@ -1,5 +1,11 @@
 # Pong Game
 
+-----------How to Play-----------
+Client: Open ..\Client\client.html
+Server: Open the project with Visual Studio 2017, and use "Start Without Debugging"
+		or Open ..\Server\x64\Debug\Server.exe
+
+
 ------------2/21/2018------------
 # Assignment 4: Milestone 2
 
