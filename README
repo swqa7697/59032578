@@ -1,35 +1,24 @@
 # Pong Game
 
+-------------Members-------------
+Shuzhan Xie  59032578
+Kaifan Xu    55072517
+
 -----------How to Play-----------
 Client: Open ..\Client\client.html
 Server: Open the project with Visual Studio 2017, and use "Start Without Debugging"
 		or Open ..\Server\x64\Debug\Server.exe
 
-
 ------------2/21/2018------------
 # Assignment 4: Milestone 2
 
-Shuzhan Xie  59032578
-	- Socket communication part and Server's send/response rules. 
-	- Track of players. 
+First Multi-player Version
 
-Kaifan Xu    55072517
-	- New Client UI, showing more paddles and the scores. 
-	- Implemented the new tracking of the ball. 
-
-	
 ------------2/15/2018------------
 # Assignment 3: Milestone 1
 
-Shuzhan Xie  59032578
-	- Client
-	- Server's socket part (communicate with client). 
+Single Player Version
 
-Kaifan Xu    55072517
-	- Server's ball tracking part
-	- Defined Ball and Paddle
-
-	
 ---------------------------------
 Command List: 
  - BP
