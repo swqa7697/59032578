@@ -52,15 +52,17 @@ typedef void (*messageCallback)(int, string);
 
 #define INTERVAL_MS 10
 
-#define BALL_SPEED_SCALE 2
+#define BALL_SPEED_SCALE 3
 
 namespace
 {
+	bool gameStarted = false;
+
 	random_device device;
 	default_random_engine engine(device());
 	uniform_real_distribution<double> distribution(-1.0, 1.0);
 
-	float rd(){
+	double rd(){
 		return distribution(engine);
 	}
 
@@ -135,12 +137,15 @@ struct Paddle {
 	int x;
 	int y;
 	int score;
+	int clientID;
+	int playerID;
+	bool active;
 
 	Paddle():
-		name(""), length(0), x(0), y(0), score(0) {}
+		name(""), length(0), x(0), y(0), score(0), clientID(-1), active(false) {}
 
-	Paddle(int Length, int posX, int posY):
-		name(""), length(Length), x(posX), y(posY), score(0) {}
+	Paddle(int Length, int posX, int posY, int clientID, int playerID, bool active):
+		name(""), length(Length), x(posX), y(posY), score(0), clientID(clientID), playerID(playerID), active(active) {}
 };
 
 class webSocket{

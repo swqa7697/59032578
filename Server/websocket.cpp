@@ -712,11 +712,9 @@ bool webSocket::wsProcessClient(int clientID, char *buffer, int bufferLength){
         // handshake not completed
 		
 		// Deny service to incoming requests to start a game, when one game is already in progress
-		for(int i = 0; i < wsClients.size(); i++){
-			if (wsClients[i] != NULL && wsClients[i]->ReadyState == WS_READY_STATE_OPEN) {
-				printf("Denying the connection. Reason: Game has already started. ");
-				return false;
-			}
+		if (gameStarted){
+			printf("Denying the connection. Reason: A game has already started. ");
+			return false;
 		}
 
         result = wsProcessClientHandshake(clientID, buffer);
@@ -778,6 +776,7 @@ void webSocket::setPeriodicHandler(nullCallback callback){
 
 void webSocket::startServer(int port){
     showAvailableIP();
+	printf("Listenning to port: 8000\n");
 
     int yes = 1;
     char buf[4096];
