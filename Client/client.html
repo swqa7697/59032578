@@ -9,10 +9,15 @@
 			#ip {line-height:20px}
 			#port {line-height:20px}
 			
-			#log {
+			#Latency {
 				position: absolute;
 				left: 800px;
 				top: 0px;
+			}
+			#log {
+				position: absolute;
+				left: 800px;
+				top: 20px;
 			}
 		</style>
 		<script src="pong.js"></script>
@@ -35,6 +40,8 @@
 			var gameStarted = false;
 			var playerComfirmed = false;
 			var name = "";
+			
+			var lastTime;
 			
 			var getReady = function(){
 				name = document.getElementById('name').value;
@@ -64,13 +71,13 @@
 					
 					//Send this player's effective position
 					if(player == player0)
-						send("P0 " + player.getX());
+						send("P0 " + player.getX() + ";" + Date.now());
 					else if(player == player1)
-						send("P1 " + player.getY());
+						send("P1 " + player.getY() + ";" + Date.now());
 					else if(player == player2)
-						send("P2 " + player.getX());
+						send("P2 " + player.getX() + ";" + Date.now());
 					else if(player == player3)
-						send("P3 " + player.getY());
+						send("P3 " + player.getY() + ";" + Date.now());
 					
 					//Ensure to get all names of players
 					if(score0.getName() == "")
@@ -97,6 +104,11 @@
 				score2.print("score2");
 				score3.print("score3");
 			};
+			
+			function showLat(ping){
+				ping = Date.now() - ping;
+				document.getElementById('Latency').innerHTML = "Ping: " + ping;
+			}
 			
 			function log(text){
 				document.getElementById('log').innerHTML = text;
@@ -200,6 +212,12 @@
 						//Log
 						else if(sub[0] == "#")
 							log(lines[i].substring(2));
+						//Latency
+						else if(sub[0] == "LT"){
+							if(Date.now() - lastTime >= 1000)
+								showLat(parseInt(sub[1]));
+							lastTime = Date.now();
+						}
 					}
 				});
 
@@ -227,6 +245,7 @@
 	<div style = "height:50px;width:600px;text-align:center;">
 		<p id='score0'></p>
 	</div>
+	<p id='Latency'>Ping: ...</p>
 	<p id='log'>...</p>
 </body>
 </html>
