@@ -139,13 +139,14 @@ struct Paddle {
 	int score;
 	int clientID;
 	int playerID;
+	long long latency;
 	bool active;
 
 	Paddle():
-		name(""), length(0), x(0), y(0), score(0), clientID(-1), active(false) {}
+		name(""), length(0), x(0), y(0), score(0), clientID(-1), playerID(-1), latency(0), active(false) {}
 
 	Paddle(int Length, int posX, int posY, int clientID, int playerID, bool active):
-		name(""), length(Length), x(posX), y(posY), score(0), clientID(clientID), playerID(playerID), active(active) {}
+		name(""), length(Length), x(posX), y(posY), score(0), clientID(clientID), playerID(playerID), latency(0), active(active) {}
 };
 
 class webSocket{

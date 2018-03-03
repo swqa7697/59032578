@@ -213,11 +213,8 @@
 						else if(sub[0] == "#")
 							log(lines[i].substring(2));
 						//Latency
-						else if(sub[0] == "LT"){
-							if(Date.now() - lastTime >= 1000)
-								showLat(parseInt(sub[1]));
-							lastTime = Date.now();
-						}
+						else if(sub[0] == "LT")
+							showLat(parseInt(sub[1]));
 					}
 				});
 

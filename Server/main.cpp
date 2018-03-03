@@ -8,7 +8,6 @@
 #include <time.h>
 #include <chrono>
 #include "websocket.h"
-#include <vector>
 
 using namespace std;
 
@@ -45,17 +44,15 @@ namespace latTools {
 			latType(type) {}
 
 		void enqueue(string s) {
-			
 			chrono::milliseconds t = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch());
-			
-			buff.insert(buff.begin(), make_pair(os.str(), t.count() + latency(latType)));
+			buf.insert(buf.begin(), make_pair(s, t.count() + latency(latType)));
 		}
 
 		pair<string, long long> dequeue() {
 			chrono::milliseconds t = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch());
-			if (t.count() >= buff.back().second) {
-				pair<string, long long> result = buff.back();
-				buff.pop_back();
+			if (t.count() >= buf.back().second) {
+				pair<string, long long> result = buf.back();
+				buf.pop_back();
 				return result;
 			}
 			else
@@ -63,17 +60,10 @@ namespace latTools {
 		}
 
 	private:
-		vector<pair<string, long long>> buff;
+		vector<pair<string, long long>> buf;
 		int latType;
 	};
 }
-
-//vector < pair<string, long long>> receiveBuff;
-
-//vector < pair<string, long long>> sendBuff;
-
-latTools::latQueue receive(LATENCY_TYPE_FIXED);
-latTools::latQueue send(LATENCY_TYPE_FIXED);
 
 webSocket server;
 
@@ -84,7 +74,11 @@ int players = 0;
 
 int interval_clocks = CLOCKS_PER_SEC * INTERVAL_MS / 1000;
 
+int latencyType = LATENCY_TYPE_FIXED;
+chrono::milliseconds lastTime = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch());
 
+latTools::latQueue receiving(latencyType);
+latTools::latQueue sending(latencyType);
 
 /* called when a client connects */
 void openHandler(int clientID) {
@@ -139,7 +133,6 @@ void closeHandler(int clientID) {
 
 /* called when a client sends a message to the server */
 void messageHandler(int clientID, string message) {
-	
 	//Names
 	if (message.substr(0, 2) == "NM") {
 		IDPlayerMap[clientID]->name = message.substr(3);
@@ -156,29 +149,38 @@ void messageHandler(int clientID, string message) {
 	else if (message == "N3") {
 		server.wsSend(clientID, "N3 " + player3.name);
 	}
+
 	//Requests of player's identification
 	else if (message == "PI") {
 		ostringstream os;
 		os << "PI " << IDPlayerMap[clientID]->playerID;
 		server.wsSend(clientID, os.str());
 	}
-	//Paddle positions
 
-	else if (message.substr(0, 2) == "P0") {
-		receive.enqueue(message);
-		player0.x = stoi(receive.dequeue.substr(3));
-	}
-	else if (message.substr(0, 2) == "P1") {
-		receive.enqueue(message);
-		player1.y = stoi(receive.dequeue.substr(3));
-	}
-	else if (message.substr(0, 2) == "P2") {
-		receive.enqueue(message);
-		player2.x = stoi(receive.dequeue.substr(3));
-	}
-	else if (message.substr(0, 2) == "P3") {
-		receive.enqueue(message);
-		player3.y = stoi(receive.dequeue.substr(3));
+	//Need Latency
+	else {
+		receiving.enqueue(message);
+
+		pair<string, long long> msg = receiving.dequeue();
+		if (msg.first != "") {
+			//Paddle positions
+			if (msg.first.substr(0, 2) == "P0") {
+				player0.x = stoi(msg.first.substr(3, msg.first.find(";") - 3));
+				player0.latency = msg.second - stoll(msg.first.substr(msg.first.find(";") + 1));
+			}
+			else if (msg.first.substr(0, 2) == "P1") {
+				player1.y = stoi(msg.first.substr(3, msg.first.find(";") - 3));
+				player1.latency = msg.second - stoll(msg.first.substr(msg.first.find(";") + 1));
+			}
+			else if (msg.first.substr(0, 2) == "P2") {
+				player2.x = stoi(msg.first.substr(3, msg.first.find(";") - 3));
+				player2.latency = msg.second - stoll(msg.first.substr(msg.first.find(";") + 1));
+			}
+			else if (msg.first.substr(0, 2) == "P3") {
+				player3.y = stoi(msg.first.substr(3, msg.first.find(";") - 3));
+				player3.latency = msg.second - stoll(msg.first.substr(msg.first.find(";") + 1));
+			}
+		}
 	}
 }
 
@@ -258,22 +260,24 @@ void periodicHandler() {
 			
 			std::chrono::milliseconds t = chrono::duration_cast<chrono::milliseconds >(
 				chrono::system_clock::now().time_since_epoch());
-			os << "LT "<< t.count();
+			os << "LT " << t.count() << "\n";
 			
-			send.enqueue(os.str());
-			auto sd = send.dequeue();
-			if(sd.second == 0){}
-			else{
+			sending.enqueue(os.str());
+			pair<string, long long> msg = sending.dequeue();
+			if(msg.first != "") {
 				for (pair<int, Paddle*> p : IDPlayerMap) {
 					if (p.second->name == "")
-						
-						server.wsSend(p.second->clientID, sd.first + "NM\n");
+						server.wsSend(p.second->clientID, msg.first + "NM\n");
 					else
-						server.wsSend(p.second->clientID, sd.first);
+						server.wsSend(p.second->clientID, msg.first);
 				}
-			
 			}
 
+			if (t.count() - lastTime.count() >= 3000) {
+				printf("Latency: \nP0: %d  P1: %d  P2: %d  P3: %d\n",
+						player0.latency, player1.latency, player2.latency, player3.latency);
+				lastTime = t;
+			}
 		}
 		next = clock() + interval_clocks;
 	}

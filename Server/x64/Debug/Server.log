@@ -1,3 +1,19 @@
 ﻿  main.cpp
+e:\documents\workspace\ics 167\pong game\server\main.cpp(277): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type '__int64'
+  e:\documents\workspace\ics 167\pong game\server\main.cpp(277): note: consider using '%lld' in the format string
+  e:\documents\workspace\ics 167\pong game\server\main.cpp(277): note: consider using '%Id' in the format string
+  e:\documents\workspace\ics 167\pong game\server\main.cpp(277): note: consider using '%I64d' in the format string
+e:\documents\workspace\ics 167\pong game\server\main.cpp(277): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 2 has type '__int64'
+  e:\documents\workspace\ics 167\pong game\server\main.cpp(277): note: consider using '%lld' in the format string
+  e:\documents\workspace\ics 167\pong game\server\main.cpp(277): note: consider using '%Id' in the format string
+  e:\documents\workspace\ics 167\pong game\server\main.cpp(277): note: consider using '%I64d' in the format string
+e:\documents\workspace\ics 167\pong game\server\main.cpp(277): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 3 has type '__int64'
+  e:\documents\workspace\ics 167\pong game\server\main.cpp(277): note: consider using '%lld' in the format string
+  e:\documents\workspace\ics 167\pong game\server\main.cpp(277): note: consider using '%Id' in the format string
+  e:\documents\workspace\ics 167\pong game\server\main.cpp(277): note: consider using '%I64d' in the format string
+e:\documents\workspace\ics 167\pong game\server\main.cpp(277): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 4 has type '__int64'
+  e:\documents\workspace\ics 167\pong game\server\main.cpp(277): note: consider using '%lld' in the format string
+  e:\documents\workspace\ics 167\pong game\server\main.cpp(277): note: consider using '%Id' in the format string
+  e:\documents\workspace\ics 167\pong game\server\main.cpp(277): note: consider using '%I64d' in the format string
 e:\documents\workspace\ics 167\pong game\server\main.cpp(39): warning C4715: 'latTools::latency': not all control paths return a value
   Server.vcxproj -> E:\Documents\workspace\ICS 167\Pong Game\Server\x64\Debug\Server.exe
