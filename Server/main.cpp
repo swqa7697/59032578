@@ -22,7 +22,7 @@ using namespace std;
 #define LATENCY_TYPE_INCREMENTAL 2
 
 namespace latTools {
-	long long min = 10, max = 100, incLat = min;
+	long long min = 10, max = 200, incLat = min;
 	random_device latDevice;
 	default_random_engine latEngine(latDevice());
 	uniform_int_distribution<long long> latDistribution(min, max);
@@ -33,7 +33,11 @@ namespace latTools {
 		else if (type = LATENCY_TYPE_RANDOM)
 			return latDistribution(latEngine);
 		else if (type = LATENCY_TYPE_INCREMENTAL) {
-			incLat += 5;
+			if (incLat < max)
+				incLat += 10;
+			else
+				incLat = max;
+
 			return incLat;
 		}
 	}
