@@ -8,6 +8,7 @@
 #include <time.h>
 #include <chrono>
 #include "websocket.h"
+#include <vector>
 
 using namespace std;
 
@@ -44,8 +45,10 @@ namespace latTools {
 			latType(type) {}
 
 		void enqueue(string s) {
+			
 			chrono::milliseconds t = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch());
-			buff.insert(buff.begin(), make_pair(s, t.count() + latency(latType)));
+			
+			buff.insert(buff.begin(), make_pair(os.str(), t.count() + latency(latType)));
 		}
 
 		pair<string, long long> dequeue() {
@@ -65,6 +68,13 @@ namespace latTools {
 	};
 }
 
+//vector < pair<string, long long>> receiveBuff;
+
+//vector < pair<string, long long>> sendBuff;
+
+latTools::latQueue receive(LATENCY_TYPE_FIXED);
+latTools::latQueue send(LATENCY_TYPE_FIXED);
+
 webSocket server;
 
 Ball ball;
@@ -73,6 +83,8 @@ map<int, Paddle*> IDPlayerMap;
 int players = 0;
 
 int interval_clocks = CLOCKS_PER_SEC * INTERVAL_MS / 1000;
+
+
 
 /* called when a client connects */
 void openHandler(int clientID) {
@@ -127,6 +139,7 @@ void closeHandler(int clientID) {
 
 /* called when a client sends a message to the server */
 void messageHandler(int clientID, string message) {
+	
 	//Names
 	if (message.substr(0, 2) == "NM") {
 		IDPlayerMap[clientID]->name = message.substr(3);
@@ -150,14 +163,23 @@ void messageHandler(int clientID, string message) {
 		server.wsSend(clientID, os.str());
 	}
 	//Paddle positions
-	else if (message.substr(0, 2) == "P0")
-		player0.x = stoi(message.substr(3));
-	else if (message.substr(0, 2) == "P1")
-		player1.y = stoi(message.substr(3));
-	else if (message.substr(0, 2) == "P2")
-		player2.x = stoi(message.substr(3));
-	else if (message.substr(0, 2) == "P3")
-		player3.y = stoi(message.substr(3));
+
+	else if (message.substr(0, 2) == "P0") {
+		receive.enqueue(message);
+		player0.x = stoi(receive.dequeue.substr(3));
+	}
+	else if (message.substr(0, 2) == "P1") {
+		receive.enqueue(message);
+		player1.y = stoi(receive.dequeue.substr(3));
+	}
+	else if (message.substr(0, 2) == "P2") {
+		receive.enqueue(message);
+		player2.x = stoi(receive.dequeue.substr(3));
+	}
+	else if (message.substr(0, 2) == "P3") {
+		receive.enqueue(message);
+		player3.y = stoi(receive.dequeue.substr(3));
+	}
 }
 
 /* called once per select() loop */
@@ -233,13 +255,25 @@ void periodicHandler() {
 			os << "S1 " << player1.score << "\n";
 			os << "S2 " << player2.score << "\n";
 			os << "S3 " << player3.score << "\n";
-
-			for (pair<int, Paddle*> p : IDPlayerMap) {
-				if (p.second->name == "")
-					server.wsSend(p.second->clientID, os.str() + "NM\n");
-				else
-					server.wsSend(p.second->clientID, os.str());
+			
+			std::chrono::milliseconds t = chrono::duration_cast<chrono::milliseconds >(
+				chrono::system_clock::now().time_since_epoch());
+			os << "LT "<< t.count();
+			
+			send.enqueue(os.str());
+			auto sd = send.dequeue();
+			if(sd.second == 0){}
+			else{
+				for (pair<int, Paddle*> p : IDPlayerMap) {
+					if (p.second->name == "")
+						
+						server.wsSend(p.second->clientID, sd.first + "NM\n");
+					else
+						server.wsSend(p.second->clientID, sd.first);
+				}
+			
 			}
+
 		}
 		next = clock() + interval_clocks;
 	}
