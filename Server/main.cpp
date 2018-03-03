@@ -48,15 +48,15 @@ namespace latTools {
 			buff.insert(buff.begin(), make_pair(s, t.count() + latency(latType)));
 		}
 
-		pair<string, long long>* dequeue() {
+		pair<string, long long> dequeue() {
 			chrono::milliseconds t = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch());
 			if (t.count() >= buff.back().second) {
 				pair<string, long long> result = buff.back();
 				buff.pop_back();
-				return &result;
+				return result;
 			}
 			else
-				return nullptr;
+				return make_pair("",0);
 		}
 
 	private:
