@@ -59,6 +59,10 @@ namespace latTools {
 				return make_pair("",0);
 		}
 
+		void setType(int type) {
+			latType = type;
+		}
+
 	private:
 		vector<pair<string, long long>> buf;
 		int latType;
@@ -284,6 +288,12 @@ void periodicHandler() {
 }
 
 int main(int argc, char *argv[]){
+	printf("Input a digit to specify latency types: \n0: Fixed  1: Random  2: Incremental\n");
+	cin >> latencyType;
+
+	sending.setType(latencyType);
+	receiving.setType(latencyType);
+
     /* set event handler */
     server.setOpenHandler(openHandler);
     server.setCloseHandler(closeHandler);

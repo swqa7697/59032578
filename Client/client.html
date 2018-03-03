@@ -41,7 +41,7 @@
 			var playerComfirmed = false;
 			var name = "";
 			
-			var lastTime;
+			var lastTime = Date.now();
 			
 			var getReady = function(){
 				name = document.getElementById('name').value;
@@ -213,8 +213,12 @@
 						else if(sub[0] == "#")
 							log(lines[i].substring(2));
 						//Latency
-						else if(sub[0] == "LT")
-							showLat(parseInt(sub[1]));
+						else if(sub[0] == "LT"){
+							if(Date.now() - lastTime >= 3000){
+								showLat(parseInt(sub[1]));
+								lastTime = Date.now();
+							}
+						}
 					}
 				});
 
