@@ -6,6 +6,7 @@
 #include <string>
 #include <sstream>
 #include <time.h>
+#include <chrono>
 #include "websocket.h"
 
 using namespace std;
@@ -15,6 +16,54 @@ using namespace std;
 
 #define BALL_RADIUS 5
 #define PADDLE_LENGTH 100
+
+#define LATENCY_TYPE_FIXED 0
+#define LATENCY_TYPE_RANDOM 1
+#define LATENCY_TYPE_INCREMENTAL 2
+
+namespace latTools {
+	long long min = 10, max = 100, incLat = min;
+	random_device latDevice;
+	default_random_engine latEngine(latDevice());
+	uniform_int_distribution<long long> latDistribution(min, max);
+
+	long long latency(int type) {
+		if (type = LATENCY_TYPE_FIXED)
+			return 30;
+		else if (type = LATENCY_TYPE_RANDOM)
+			return latDistribution(latEngine);
+		else if (type = LATENCY_TYPE_INCREMENTAL) {
+			incLat += 5;
+			return incLat;
+		}
+	}
+
+	class latQueue {
+	public:
+		latQueue(int type) :
+			latType(type) {}
+
+		void enqueue(string s) {
+			chrono::milliseconds t = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch());
+			buff.insert(buff.begin(), make_pair(s, t.count() + latency(latType)));
+		}
+
+		pair<string, long long>* dequeue() {
+			chrono::milliseconds t = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch());
+			if (t.count() >= buff.back().second) {
+				pair<string, long long> result = buff.back();
+				buff.pop_back();
+				return &result;
+			}
+			else
+				return nullptr;
+		}
+
+	private:
+		vector<pair<string, long long>> buff;
+		int latType;
+	};
+}
 
 webSocket server;
 

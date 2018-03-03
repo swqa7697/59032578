@@ -1,2 +1,3 @@
 ﻿  main.cpp
+e:\documents\workspace\ics 167\pong game\server\main.cpp(39): warning C4715: 'latTools::latency': not all control paths return a value
   Server.vcxproj -> E:\Documents\workspace\ICS 167\Pong Game\Server\x64\Debug\Server.exe
