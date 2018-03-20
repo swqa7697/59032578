@@ -1,0 +1,21 @@
+# Report of Milestone 4
+
+There are 2 major issues to be solved in this milestone: 
+
+1. Responsiveness Issue: 
+    In order to improve the game's responsiveness, we let the player's input
+(controlling his/her paddle) be updated to the local game state immediately, 
+and send the effective coordinate of the paddle every frame. (The game running
+as 60fps.) In this case, the client program does not need to read the coordinate
+of the current player's paddle which sent back from the server, so jump-back
+problem will not happen. 
+
+2. Smoothness Issue: 
+    The client's refresh rate is 6 times tickrate of the server, so we equally
+break down every movement of the ball into 6 parts and update it separately in
+6 frames. For the other players' (other than the current player) paddles, we use
+the same mechanism, but the only difference is that the ball will predict the
+following movements using the same speed if the client does not receive the
+message on time, while the paddles will not because we do not want to predict the
+other players' actions. As a result, the game is able to run quite smoothly with
+low server tickrate and somewhat high latency. 
