@@ -9,6 +9,9 @@ Client: Open ..\Client\client.html
 Server: Open the project with Visual Studio 2017, and use "Start Without Debugging"
 		or Open ..\Server\x64\Debug\Server.exe
 
+------------3/19/2018------------
+
+
 ------------3/02/2018------------
 # Assignment 5: Milestone 3
 

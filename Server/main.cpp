@@ -22,19 +22,19 @@ using namespace std;
 #define LATENCY_TYPE_INCREMENTAL 2
 
 namespace latTools {
-	long long min = 10, max = 200, incLat = min;
+	long long min = 50, max = 100, incLat = min;
 	random_device latDevice;
 	default_random_engine latEngine(latDevice());
 	uniform_int_distribution<long long> latDistribution(min, max);
 
 	long long latency(int type) {
 		if (type = LATENCY_TYPE_FIXED)
-			return 30;
+			return min;
 		else if (type = LATENCY_TYPE_RANDOM)
 			return latDistribution(latEngine);
 		else if (type = LATENCY_TYPE_INCREMENTAL) {
 			if (incLat < max)
-				incLat += 10;
+				incLat += 1;
 			else
 				incLat = max;
 
@@ -286,8 +286,9 @@ void periodicHandler() {
 						player0.latency, player1.latency, player2.latency, player3.latency);
 				lastTime = t;
 			}
+
+			next = clock() + interval_clocks;
 		}
-		next = clock() + interval_clocks;
 	}
 }
 
