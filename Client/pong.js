@@ -9,15 +9,30 @@ canvas.height = height;
 var context = canvas.getContext('2d');
 
 function Ball(x, y){
+	this.radius = 5;
 	this.x = x;
 	this.y = y;
-	this.radius = 5;
+	this.x_speed = 0;
+	this.y_speed = 0;
 }
 
+//Deprecated function
+/*
 Ball.prototype.setPosition = function(x, y){
 	this.x = x;
 	this.y = y;
-}
+};
+*/
+
+Ball.prototype.setMovement = function(x, y){
+	this.x_speed = (x - this.x)/6;
+	this.y_speed = (y - this.y)/6;
+};
+
+Ball.prototype.update = function(){
+	this.x += this.x_speed;
+	this.y += this.y_speed;
+};
 
 Ball.prototype.render = function(){
 	context.beginPath();
@@ -50,7 +65,7 @@ Paddle.prototype.move = function(movementX, movementY){
 		this.y += movementY;
 		if(this.y < 0)
 			this.y = 0;
-		else if(this.y + this.height > height)
+		else if(this.y+this.height > height)
 			this.y = height - this.height;
 	}
 };
@@ -69,26 +84,44 @@ function Player(ID){
 	
 	this.speed = 2;
 	this.player = ID;
+	this.movement = 0;
+	this.stepAhead = 0;
 }
 
 Player.prototype.getX = function(){
 	return this.paddle.x;
-}
+};
 
 Player.prototype.getY = function(){
 	return this.paddle.y;
-}
+};
 
 Player.prototype.setX = function(X){
 	this.paddle.x = X;
-}
+};
 
 Player.prototype.setY = function(Y){
 	this.paddle.y = Y;
-}
+};
 
-Player.prototype.render = function(){
-	this.paddle.render();
+Player.prototype.setMovement = function(des){
+	if(this.player == 0 || this.player == 2)
+		this.movement = (des - this.paddle.x)/6;
+	else
+		this.movement = (des - this.paddle.y)/6;
+	
+	this.stepAhead = 6;
+};
+
+Player.prototype.updateMovement = function(){
+	if(this.stepAhead > 0){
+		if(this.player == 0 || this.player == 2)
+			this.paddle.x += this.movement;
+		else
+			this.paddle.y += this.movement;
+		
+		this.stepAhead--;
+	}
 };
 
 Player.prototype.update = function(){
@@ -116,6 +149,10 @@ Player.prototype.update = function(){
 	}
 };
 
+Player.prototype.render = function(){
+	this.paddle.render();
+};
+
 function Score(){
 	this.name = "";
 	this.score = 0;
@@ -123,11 +160,11 @@ function Score(){
 
 Score.prototype.setName = function(name){
 	this.name = name;
-}
+};
 
 Score.prototype.getName = function(){
 	return this.name;
-}
+};
 
 Score.prototype.setScore = function(score){
 	this.score = score;

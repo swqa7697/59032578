@@ -10,12 +10,20 @@ Server: Open the project with Visual Studio 2017, and use "Start Without Debuggi
 		or Open ..\Server\x64\Debug\Server.exe
 
 ------------3/19/2018------------
+# Assignment 6: Milestone 4
 
+Latency Mitigation
+
+Related settings of the server: 
+Min: 50ms
+Max: 100ms
+Tickrate: 10Hz
 
 ------------3/02/2018------------
 # Assignment 5: Milestone 3
 
 Added Network Latency
+(3 Patterns: Fixed, Random, and Incremental)
 
 ------------2/21/2018------------
 # Assignment 4: Milestone 2

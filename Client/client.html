@@ -88,6 +88,19 @@
 						send("N2");
 					if(score3.getName() == "")
 						send("N3");
+					
+					//Update the Ball
+					ball.update();
+					
+					//Update other players
+					if(player != player0)
+						player0.updateMovement();
+					if(player != player1)
+						player1.updateMovement();
+					if(player != player2)
+						player2.updateMovement();
+					if(player != player3)
+						player3.updateMovement();
 				}
 			};
 
@@ -154,7 +167,7 @@
 									send("PI");
 							}
 							if(gameStarted)
-								ball.setPosition(parseFloat(sub[1]), parseFloat(sub[2]));
+								ball.setMovement(parseFloat(sub[1]), parseFloat(sub[2]));
 						}
 						//Player's identification
 						else if(sub[0] == "PI"){
@@ -202,13 +215,13 @@
 							score3.setScore(parseInt(sub[1]));
 						//Players' positions
 						else if(sub[0] == "P0" && player != player0)
-							player0.setX(parseInt(sub[1]));
+							player0.setMovement(parseInt(sub[1]));
 						else if(sub[0] == "P1" && player != player1)
-							player1.setY(parseInt(sub[1]));
+							player1.setMovement(parseInt(sub[1]));
 						else if(sub[0] == "P2" && player != player2)
-							player2.setX(parseInt(sub[1]));
+							player2.setMovement(parseInt(sub[1]));
 						else if(sub[0] == "P3" && player != player3)
-							player3.setY(parseInt(sub[1]));
+							player3.setMovement(parseInt(sub[1]));
 						//Log
 						else if(sub[0] == "#")
 							log(lines[i].substring(2));
